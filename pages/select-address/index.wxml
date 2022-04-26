@@ -1,0 +1,15 @@
+<van-empty wx:if="{{ !addressList }}" description="暂无收货地址" />
+
+<!-- 如果后台存在地址列表的话，则遍历地址列表进行渲染 -->
+<view class="list" wx:for="{{addressList}}" wx:key="id">
+  <view class="aaa">
+    <van-cell custom-class="aaa" title="{{item.linkMan}} {{item.mobile}}" label="{{item.address}}" bind:click="selectTap" data-id="{{item.id}}" />
+  </view>
+  <van-icon name="records" size="40rpx" bind:click="editAddess" data-id="{{item.id}}" />
+</view>
+
+<!-- 底部新增收货地址按钮，并绑定点击事件addAddess -->
+<view style="height:32rpx"></view>
+<view class="safe-bottom-box">
+  <van-button type="primary" icon="add-o" block bind:click="addAddess">新增收货地址</van-button>
+</view>
