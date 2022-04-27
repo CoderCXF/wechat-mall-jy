@@ -39,9 +39,9 @@
     "ignoreUploadUnusedFiles": true
   },
   "compileType": "miniprogram",
-  "libVersion": "2.22.1",
+  "libVersion": "2.24.0",
   "appid": "wxf137aaef62d8e5fe",
-  "projectname": "wechat-app-mall",
+  "projectname": "wechat-mall-jy",
   "scripts": {},
   "simulatorType": "wechat",
   "simulatorPluginLibVersion": {},

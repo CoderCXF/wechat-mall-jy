@@ -1,7 +1,6 @@
 // 会员卡页面
 const WXAPI = require('apifm-wxapi')
 Page({
-
   data: {
     page: 1 // 读取第几页
   },

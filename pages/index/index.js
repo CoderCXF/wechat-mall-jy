@@ -2,6 +2,7 @@ const WXAPI = require('apifm-wxapi')
 const TOOLS = require('../../utils/tools.js')
 const AUTH = require('../../utils/auth')
 
+// 通过该函数可以实现在当前页面获取app.js,总而获取app.js中定义的全局数据
 const APP = getApp()
 
 Page({
@@ -14,6 +15,7 @@ Page({
     selectCurrent: 0,
     categories: [],  //商品分类
     goods: [],   //所有商品列表
+    goodsLess: [], // 每一个分类显示6张图片
     loadingMoreHidden: true,
     coupons: [],  //优惠券列表
     curPage: 1,  //当前页
@@ -129,21 +131,21 @@ Page({
     WXAPI.goodsv2({
       recommendStatus: 1
     }).then(res => {
-      if (res.code === 0){
+      if (res.code === 0){  // code===0 表示获取成功
         that.setData({
           goodsRecommend: res.data.result
         })
       }      
     })
-    // 获取优惠券
-    that.getCoupons()
+    // // 获取优惠券
+    // that.getCoupons()
     // 获取公告
     that.getNotice()
     // 获取砍价商品
     that.kanjiaGoods()
     // 获取拼团商品
     that.pingtuanGoods()
-    // 获取广告位信息
+    // 获取广告位信息-首页弹窗广告
     this.adPosition()
     // 读取系统参数
     this.readConfigVal()
@@ -151,6 +153,7 @@ Page({
       this.readConfigVal()
     }
   },
+  // 读取系统参数
   readConfigVal() {
     wx.setNavigationBarTitle({
       title: wx.getStorageSync('mallName')
@@ -188,14 +191,14 @@ Page({
     const res1 = await WXAPI.banners({
       type: 'index'  //这里的index是标识的图片类型，表示banner加载的是index类型的图像，因为在banner管理中存在其他类型的图像，比如score、livelist和app
     })
-    if (res1.code == 700) {
+    if (res1.code == 700) { // 700表示出错
       wx.showModal({
         title: '提示',
         content: '请在后台添加 banner 轮播图片，自定义类型填写 index',
         showCancel: false
       })
     } else {
-      _data.banners = res1.data
+      _data.banners = res1.data // 保存banners至_data对象中
     }
     this.setData(_data)
   },
@@ -242,7 +245,42 @@ Page({
       categories: categories,
       curPage: 1
     });
-    this.getGoodsList(0);
+
+    this.getGoodsList(0);  //参数0代表查找所有的商品
+    this.getGoodsLess();
+  },
+  // 获取指定分类下的所有商品
+  async getGoodsLess() {
+    let goodsLessArr = []
+    let numsPush = 0
+
+    for(let j = 0; j < this.data.categories.length;j++){
+      let arr = []
+      let obj = {
+        name: '',
+        data: [],
+        categoryId: 0
+      }
+      let cid = this.data.categories[j].id
+      let cname = this.data.categories[j].name
+      const res = await WXAPI.goodsv2({
+        categoryId: cid
+      })
+      // console.log(res)
+      if(res.code == 404 || res.code == 700){
+        continue
+      }
+      obj.name = cname
+      obj.categoryId = cid
+      numsPush = Math.min(6, res.data.result.length)
+      for(let i = 0; i < numsPush; i++){
+        obj.data.push(res.data.result[i])
+      }
+      goodsLessArr.push(obj)
+    }
+    this.setData({
+      goodsLess: goodsLessArr
+    })
   },
   // 获取指定分类下的所有商品列表：WXAPI.goodsv2
   async getGoodsList(categoryId, append) {
@@ -259,7 +297,7 @@ Page({
       pageSize: this.data.pageSize
     })
     wx.hideLoading()
-    if (res.code == 404 || res.code == 700) {
+    if (res.code == 404 || res.code == 700) { // 错误；404-接口不存在；700-暂无数据
       let newData = {
         loadingMoreHidden: false
       }
@@ -278,7 +316,7 @@ Page({
     }
     this.setData({
       loadingMoreHidden: true,
-      goods: goods,
+      goods: goods, //获得所有商品
     });
   },
   // 获取优惠券：WXAPI.coupons()
@@ -355,11 +393,11 @@ Page({
     }
   },
   // 前往优惠券页面，这里使用的函数是switchTab,因为是tabbar页面
-  goCoupons: function (e) {
-    wx.switchTab({
-      url: "/pages/coupons/index"
-    })
-  },
+  // goCoupons: function (e) {
+  //   wx.switchTab({
+  //     url: "/pages/coupons/index"
+  //   })
+  // },
   // 获取拼团商品：WXAPI.goodsv2(pingtuan)
   pingtuanGoods(){ 
     const _this = this
@@ -389,13 +427,13 @@ Page({
   },
   // 广告位管理，在CMS中有相应设置
   async adPosition() {
-    let res = await WXAPI.adPosition('indexPop')
+    let res = await WXAPI.adPosition('indexPop') // 广告位广告图
     if (res.code == 0) {
       this.setData({
         adPositionIndexPop: res.data
       })
     }
-    res = await WXAPI.adPosition('index-live-pic')
+    res = await WXAPI.adPosition('index-live-pic') // 直播广告图
     if (res.code == 0) {
       this.setData({
         adPositionIndexLivePic: res.data
@@ -435,8 +473,36 @@ Page({
         return ele.type == 'index' // 只筛选类型为 index 的分类
       })
       this.setData({
-        cmsCategories
+        cmsCategories //ES6的简洁语法，如果key和value的值一样的话，只写一个就可以
       })
     }
   },
+  // 处理点击更多事件
+  handleMore(e){
+    const category = this.data.categories.find(ele => {
+      return ele.id == e.currentTarget.dataset.id
+    })
+    console.log(category)
+    wx.setStorageSync("_categoryId", category.id)
+    wx.switchTab({
+      url: '/pages/category/category',
+    })
+  }
 })
+
+  // // 商品分类点击事件
+  // tabClick(e) {
+  //   const category = this.data.categories.find(ele => {
+  //     return ele.id == e.currentTarget.dataset.id
+  //   })
+  //   if (category.vopCid1 || category.vopCid2) {
+  //     wx.navigateTo({
+  //       url: '/pages/goods/list-vop?cid1=' + (category.vopCid1 ? category.vopCid1 : '') + '&cid2=' + (category.vopCid2 ? category.vopCid2 : ''),
+  //     })
+  //   } else {
+  //     wx.setStorageSync("_categoryId", category.id)
+  //     wx.switchTab({
+  //       url: '/pages/category/category',
+  //     })
+  //   }
+  // },

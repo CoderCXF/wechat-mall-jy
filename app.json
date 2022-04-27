@@ -30,7 +30,6 @@
     "pages/score/growth",
     "pages/sign/index",
     "pages/maidan/index",
-    "pages/coupons/index",
     "pages/coupons/merge",
     "pages/invoice/list",
     "pages/invoice/apply",
@@ -118,12 +117,6 @@
         "iconPath": "images/nav/fl-off.png",
         "selectedIconPath": "images/nav/fl-on.png",
         "text": "分类"
-      },
-      {
-        "pagePath": "pages/coupons/index",
-        "iconPath": "images/nav/coupon-off.png",
-        "selectedIconPath": "images/nav/coupon-on.png",
-        "text": "优惠券"
       },
       {
         "pagePath": "pages/shop-cart/index",

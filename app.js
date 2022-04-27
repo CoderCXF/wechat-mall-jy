@@ -2,13 +2,14 @@ const WXAPI = require('apifm-wxapi')
 const CONFIG = require('config.js')
 const AUTH = require('utils/auth')
 App({
+  // 整个小程序的入口地址
   onLaunch: function() {
     const subDomain = wx.getExtConfigSync().subDomain
     if (subDomain) {
       WXAPI.init(subDomain)
     } else {
-      WXAPI.init(CONFIG.subDomain)
-      WXAPI.setMerchantId(CONFIG.merchantId)
+      WXAPI.init(CONFIG.subDomain) // 子域名：config.js
+      WXAPI.setMerchantId(CONFIG.merchantId) // 商户ID:config.js
     }
     
     const that = this;

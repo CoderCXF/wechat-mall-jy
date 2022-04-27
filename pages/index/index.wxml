@@ -42,6 +42,7 @@ module.exports = {
   }
 }
 </wxs>
+<!-- 首页轮播图 -->
 <view class="swiper-container">
   <swiper class="swiper1" indicator-dots="true" indicator-active-color="#fff" autoplay circular>
     <swiper-item wx:for="{{banners}}" wx:key="id">
@@ -61,6 +62,7 @@ module.exports = {
     </swiper>
   </view>
 </view>
+<!-- 首页分类容器 -->
 <view class="category-container">
   <view class="category-box">
     <view class="category-list" wx:for="{{categories}}" wx:key="id">
@@ -79,6 +81,7 @@ module.exports = {
     </view>
   </view>
 </view>
+<!-- 优惠资讯 -->
 <view class="notice-box" wx:if="{{noticeList}}">
   <swiper class="notice_swiper" vertical autoplay circular interval="8000">
     <swiper-item wx:for="{{noticeList.dataList}}" wx:key="id">
@@ -91,7 +94,7 @@ module.exports = {
 </view>
 <view class="container">
   <image wx:if="{{ adPositionIndexLivePic }}" class="live-banner" src="{{ adPositionIndexLivePic.val }}" mode="widthFix" bindtap="clickAdPositionIndexLive"></image>
-  <!-- 秒杀开始 -->
+  <!-- 秒杀 -->
   <block wx:if="{{miaoshaGoods && miaoshaGoods.length > 0}}">
     <van-divider custom-class="table-text" contentPosition="center">
       <image class="table-icon-miaosha" src="../../images/home/miaosha.png"></image> 限时秒杀
@@ -146,6 +149,7 @@ module.exports = {
     </view>
   </view>
   <view class="space"></view>
+  <!-- 砍价 -->
   <view wx-if="{{kanjiaList.length > 0}}"
     class="kanjia-container">
     <van-divider custom-class="table-text" contentPosition="center">
@@ -187,6 +191,32 @@ module.exports = {
   </block>
 
   <view class='space'></view>
+  <!-- 修改样式，每一个分类为一个container,展示6个案例 -->
+  <!-- 商品分类列表开始 -->
+  <view class="cat_container">
+    <view class="cat_item" wx:for="{{goodsLess}}" wx:key="id" wx:for-index="index1" wx:for-item="item1">
+        <view class="cat_title"  bindtap="handleMore" data-id="{{item1.categoryId}}">
+          <view class="title_space"></view>
+          <view class="title_left">{{item1.name}}</view>
+          <view class="title_right">>>更多</view>
+        </view>
+        <view class="line"></view>
+        <!-- 6个商品信息容器 -->
+        <view class="cat_content">
+          <view class="content_item" wx:for="{{item1.data}}" wx:key="id" wx:for-index="index2" wx:for-item="item2">
+            <view class="content_item_column">
+              <image src="{{item2.pic}}" mode="aspectFill"></image>
+              <view class="info_container">
+                <view class="info_text">{{item2.name}}</view>
+                <view class="info_price">￥{{item2.minPrice}}</view>
+              </view>
+            </view>
+          </view>
+        </view>
+    </view>
+  </view>
+  <!-- 商品分类列表结束 -->
+  <!-- van-divider：vant组件分隔线，可显示文字和分隔线 -->
   <van-divider custom-class="table-text" contentPosition="center">
     <image class="table-icon-goodslist" src="../../images/home/goodslist.png"></image> 商品列表
   </van-divider>
@@ -206,11 +236,12 @@ module.exports = {
   </view>
   <van-divider wx:if="{{ !loadingMoreHidden }}" contentPosition="center">没有更多啦</van-divider>
 </view>
-<!-- 优惠券按钮，添加点击事件 -->
-<view class='coupons-float' bindtap="goCoupons">
+<!-- 优惠券按钮，添加点击事件-注释 -->
+<!-- <view class='coupons-float' bindtap="goCoupons">
   <image src="/images/gift.png"></image>
-</view>
+</view> -->
 
+<!-- 首页广告位置弹出窗，使用vant组件，保留 -->
 <van-overlay show="{{ adPositionIndexPop }}">
   <view class="adPositionIndexPop">
     <image src="{{ adPositionIndexPop.val }}" mode="widthFix" bindtap="clickAdPositionIndexPop"></image>
