@@ -2,6 +2,7 @@
 <import src="../template-cart/template-cart.wxml" />
 
 <view class="container">
+<!-- 这里定义了两个标签 -->
   <van-tabs wx:if="{{ shopping_cart_vop_open == 1 }}" custom-class="vtabs" shopCarType="{{ shopCarType }}" bind:change="onChange">
     <van-tab title="自营商品">
       <template is="{{shippingCarInfo.items.length > 0 ? 'cart-goods-list' : 'no-goods'}}"
@@ -12,8 +13,11 @@
   data="{{...shippingCarInfo, saveHidden, allSelect, noSelect,shopCarType}}"></template>
     </van-tab>
   </van-tabs>
+  <!-- 其实最后渲染的是下面模板，上面模板没有被渲染
+       因为 shopping_cart_vop_open始终等于 0
+   -->
   <template wx:else is="{{shippingCarInfo.items.length > 0 ? 'cart-goods-list' : 'no-goods'}}"
-  data="{{...shippingCarInfo, saveHidden, allSelect, noSelect,shopCarType}}"></template>
+  data="{{...shippingCarInfo, saveHidden, allSelect, noSelect,shopCarType, isShowContact}}"></template>
 
   
 </view>

@@ -8,19 +8,28 @@
 
 <template name="cart-goods-list">
   <view wx:if="{{ shopCarType == 0 }}" class="goodsList"> <!-- 自营 -->
+  <!-- van-cell 单元格组-->
+  <!-- shop-name:店铺名称 -->
     <van-cell-group wx:for="{{shopList}}" wx:for-item="shop" wx:for-index="shopIndex" wx:key="id" title="{{ shop.name }}">
       <view class="a-gooods" wx:for="{{items}}" wx:key="key" wx:if="{{ item.shopId == shop.id }}">
         <view class="a-goods-conts {{item.active? 'active':''}}" bindtouchstart="touchS" bindtouchmove="touchM"
           bindtouchend="touchE" data-index="{{index}}" style="{{item.left}}">
+          <!-- 商品信息盒子 -->
           <view class="goods-info">
+          <!-- 单选框 -->
             <view class="radio-box">
               <radio checked="{{ item.selected }}" bindtap="radioClick" data-index="{{index}}" />
             </view>
-            <view class="img-box">
+            <!-- 图片 -->
+            <view class="img-box" bindtap="clkToDetail" data-id="{{item.goodsId}}">
               <image mode="aspectFill" src="{{item.pic}}" class="img" />
             </view>
-            <view class="text-box">
+            <!-- 商品描述信息 -->
+            <view class="text-box" bindtap="clkToDetail" data-id="{{item.goodsId}}">
+              <!-- 描述信息头 -->
               <view class="goods-title">{{item.name}}</view>
+              <!-- 颜色和尺码等sku信息，默认保存在后端items.sku数组中；
+                   如果该商品没有添加sku的话，默认不显示-->
               <view wx:show="{{item.sku}}" class="goods-label">
                 <block wx:for="{{item.sku}}" wx:for-item="option" wx:key="index">
                   {{option.optionName}}:{{option.optionValueName}}
@@ -29,7 +38,9 @@
                   {{option.pname}}:{{option.name}}
                 </block>
               </view>
+              <!-- 价格 -->
               <view class="goods-price">¥ {{item.price}}</view>
+              <!-- 数量和加减事件 -->
               <view class="buy-num">
                 <view class="jian-btn" catchtap="jianBtnTap" data-index="{{index}}">-</view>
                 <input type="number" value="{{item.number}}" data-key="{{item.key}}" bindinput="changeCarNumber" />
@@ -88,13 +99,20 @@
       </view>
     </view>
   </view>
+  <!-- 结算盒子 -->
   <view class="jiesuan-box">
+    <!-- 左边的价格 -->
     <view class="left-price">
       <view wx:if="{{ score }}" class="total">合计：¥ {{price}} + {{score}} 积分</view>
       <view wx:else class="total">合计：¥ {{price}}</view>
     </view>
-    <view class="to-pay-btn">
-      <navigator url="/pages/to-pay-order/index?shopCarType={{shopCarType}}">去结算</navigator>
+    <!-- 右边的去结算块 -->
+    <view class="to-pay-btn" wx:if="{{price > 0}}">
+      <!-- <navigator url="/pages/to-pay-order/index?shopCarType={{shopCarType}}">去结算</navigator> -->
+      <!-- <button open-type="contact" style="">联系定制</button> -->
+      <van-goods-action-button  text="联系定制"  open-type="contact" type="warning"  
+      send-message-title="分享商品" send-message-img="{{shippingCarInfo.items[0].pic}}"
+      send-message-path="/pages/shareDetails/index" show-message-card="{{ true }}" />
     </view>
   </view>
 </template>

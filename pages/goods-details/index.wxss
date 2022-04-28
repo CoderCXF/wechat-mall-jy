@@ -598,6 +598,7 @@ swiper-item image {
   display: flex;
   align-items: center;
   background: #fff;
+  border-radius: 12px;
 }
 
 .shop-container image {
@@ -684,4 +685,8 @@ swiper-item image {
   height: 88rpx;
   border-radius: 50%;
   flex-shrink: 0;
+}
+
+.choice_container{
+  margin-top: 20rpx;
 }

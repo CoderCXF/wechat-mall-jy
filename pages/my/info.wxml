@@ -1,3 +1,4 @@
+<!-- 个人信息/修改资料 -->
 <form catchsubmit="formSubmit">
   <van-cell title="头像" is-link center bind:click="chooseImage">
     <van-image

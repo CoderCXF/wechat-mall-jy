@@ -7,6 +7,7 @@
     </view>
   </van-sticky>
   <scroll-view class="scroll-container" scroll-into-view="{{toView}}" scroll-y="true" scroll-with-animation="true" bindscroll="bindscroll">
+    <!-- 轮播图开始 -->
     <view class="swiper-container" id="swiper-container">
       <swiper class="swiper_box" indicator-dots="true" indicator-active-color="#fff"
         autoplay="{{!goodsDetail.basicInfo.videoId}}" circular>
@@ -18,6 +19,8 @@
         </swiper-item>
       </swiper>
     </view>
+    <!-- 轮播图结束 -->
+    <!-- 商品基本信息：价格和介绍 -->
     <view class="goods-info">
       <view class="goods-info-top-container">
         <view class="goods-profile">
@@ -38,15 +41,19 @@
           </view>
         </view> -->
       </view>
+      <!-- 商品名称 -->
       <view class="goods-title">{{goodsDetail.basicInfo.name}}</view>
+      <!-- 商品描述 -->
       <view class="characteristic">{{goodsDetail.basicInfo.characteristic}}</view>
-      <view class="goods-share" wx:if="{{goodsDetail.basicInfo.commissionType == 1}}">分享有赏，好友下单后可得
+      <!-- 分享-目前未开启 -->
+      <!-- <view class="goods-share" wx:if="{{goodsDetail.basicInfo.commissionType == 1}}">分享有赏，好友下单后可得
         {{goodsDetail.basicInfo.commission}} 积分奖励</view>
       <view class="goods-share" wx:if="{{goodsDetail.basicInfo.commissionType == 2}}">分享有赏，好友下单后可得
-        {{goodsDetail.basicInfo.commission}}元 现金奖励</view>     
+        {{goodsDetail.basicInfo.commission}}元 现金奖励</view>      -->
     </view>
 
-    <van-cell-group wx:if="{{curGoodsKanjia}}" title="商品砍价设置">
+    <!-- 砍价和拼团功能区:全部注释-->
+    <!-- <van-cell-group wx:if="{{curGoodsKanjia}}" title="商品砍价设置">
       <van-cell title="限量" value="{{curGoodsKanjia.number}}份" />
       <van-cell title="已售" value="{{curGoodsKanjia.numberBuy}}份" />
       <van-cell title="原价" value="￥{{curGoodsKanjia.originalPrice}}" />
@@ -103,15 +110,21 @@
           <button type="warn" size="mini" data-pingtuanopenid="{{item.id}}" bindtap="toPingtuan"> 去拼单 </button>
         </view>
       </view>
-    </view>
-    <van-cell wx:if="{{hasMoreSelect && goodsDetailSkuShowType==0}}" custom-class="vw100 goods-property-container" border="{{false}}" 
+    </view> -->
+    <!-- 请选择商品规格页面 van-cell-->
+    <view class="choice_container">
+      <van-cell wx:if="{{hasMoreSelect && goodsDetailSkuShowType==0}}" custom-class="vw100 goods-property-container" border="{{false}}" 
       is-link bind:click="bindGuiGeTap">
-      <view slot="title">
-        请选择:
-        <block wx:for="{{goodsDetail.properties}}" wx:key="id"> {{item.name}}</block>
-        <block wx:for="{{goodsAddition}}" wx:key="id"> {{item.name}}</block>
-      </view>
-    </van-cell>
+      <!-- van-cell组件并且使用插槽 -->
+        <view slot="title">
+          请选择:
+          <!-- 选择的颜色和样式 -->
+          <block wx:for="{{goodsDetail.properties}}" wx:key="id"> {{item.name}}</block>
+          <block wx:for="{{goodsAddition}}" wx:key="id"> {{item.name}}</block>
+        </view>
+      </van-cell>
+    </view>
+    <!-- 商品规则弹出窗，需要点击选择商品规格事件触发，永远不会被触发 -->
     <view class="size-label-box2" wx:if="{{goodsDetailSkuShowType==1}}">
       <view class="label-title">选择商品规格</view>
       <view class="size-label-box">
@@ -131,13 +144,33 @@
         </view>
       </van-cell>
     </view>
-    <view wx:if="{{shopSubdetail}}" class="shop-container">
-      <image mode="aspectFill" src="{{shopSubdetail.info.pic}}"></image>
+    <!-- 门店详情 -->
+    <!-- 当选择该商品所属的门店的时候，会被渲染（这里保留，选择渲染的更加高级） -->
+    <view wx:if="{{shopSubdetail}}" class="shop-container" bindtap="handleMapShowStatus">
+      <image mode="aspectFill" src="{{shopSubdetail.info.logo}}"></image>
       <view class="info">
-        <view class="title">{{shopSubdetail.info.name}}</view>
+        <view class="title">{{shopSubdetail.info.name}}
+          <van-icon name="location-o" color="red" size="12px" custom-style="padding: 0 10rpx" />
+        </view>
         <view class="address">{{shopSubdetail.info.address}}</view>
       </view>
     </view>
+    <!-- 显示门店地图页面，点击选择 -->
+    <van-popup show="{{ showMap }}"  position="bottom" closeable close-icon="close" round 
+    custom-style="padding-top:48rpx;max-height: 80%;padding-bottom: 200rpx" 
+    safe-area-inset-bottom bind:close="closeMapTap">
+      <map
+        id="myMap"
+        style="width: 100%; height: 300px;"
+        latitude="{{latitude}}"
+        longitude="{{longitude}}"
+        markers="{{markers}}"
+        covers="{{covers}}"
+        show-location
+      ></map>
+    </van-popup>
+    <!-- 地图结束 -->
+    <!-- 商品详情 -->
     <view class="goods-des-info" id="goods-des-info">
       <view class="label-title"> 
         <view class="left">商品详情</view>
@@ -146,6 +179,7 @@
         <parser html="{{goodsDetail.content}}" />
       </view>
     </view>
+    <!-- 商品评价和砍价 -->
     <van-cell-group id="reputation" wx:if="{{!curGoodsKanjia && reputation}}" custom-class="vw100 reputation-cell-group">
       <view class="label-title"> 
         <wxs module="goodReputationPercent">
@@ -195,16 +229,18 @@
       </view>
     </view>
   </scroll-view>
+  <!-- 下方若干action功能 -->
+  <!-- 客服、购物车、收藏、加入购物车和立即购买 -->
   <van-goods-action wx:if="{{!curGoodsKanjia}}">
     <van-goods-action-icon icon="chat-o" text="客服" open-type="contact"
       send-message-title="{{goodsDetail.basicInfo.name}}" send-message-img="{{goodsDetail.basicInfo.pic}}"
       send-message-path="/pages/goods-details/index?id={{goodsDetail.basicInfo.id}}" show-message-card="{{ true }}" />
-    <van-goods-action-icon icon="cart-o" text="购物车" bind:click="goShopCar" info="{{ shopNum ? shopNum : '' }}" />
-    <van-goods-action-icon icon="{{faved?'like':'like-o'}}" text="收藏" bind:click="addFav" />
-    <van-goods-action-button wx:if="{{!goodsDetail.basicInfo.pingtuan}}" text="加入购物车" type="warning"
+    <van-goods-action-icon icon="cart-o" text="收藏" bind:click="goShopCar" info="{{ shopNum ? shopNum : '' }}" />
+    <!-- <van-goods-action-icon icon="{{faved?'like':'like-o'}}" text="收藏" bind:click="addFav" /> -->
+    <van-goods-action-button wx:if="{{!goodsDetail.basicInfo.pingtuan}}" text="添加收藏" type="warning"
       bind:click="{{goodsDetailSkuShowType==0?'toAddShopCar':'addShopCar'}}" />
-    <van-goods-action-button wx:if="{{!goodsDetail.basicInfo.pingtuan}}" text="立即购买" data-shopType="{{shopType}}"
-      bind:click="{{goodsDetailSkuShowType==0?'tobuy':'buyNow'}}" />
+    <!-- <van-goods-action-button wx:if="{{!goodsDetail.basicInfo.pingtuan}}" text="立即购买" data-shopType="{{shopType}}"
+      bind:click="{{goodsDetailSkuShowType==0?'tobuy':'buyNow'}}" /> -->
     <van-goods-action-button wx:if="{{goodsDetail.basicInfo.pingtuan}}" text="单独购买" type="warning"
       bind:click="tobuy" />
     <van-goods-action-button wx:if="{{goodsDetail.basicInfo.pingtuan}}" text="发起拼团" bind:click="toPingtuan" />
@@ -221,7 +257,7 @@
     <button type="warn" size="mini" bindtap='closePop'> 关闭 </button>
   </view>
 </block>
-
+<!-- 生成商品海报 -->
 <poster id="poster" config="{{posterConfig}}" bind:success="onPosterSuccess" bind:fail="onPosterFail"></poster>
 <view wx:if="{{showposterImg}}" class="popup-mask"></view>
 <view wx:if="{{showposterImg}}" class="posterImg-box">
@@ -229,6 +265,7 @@
   <view class="btn-create" bindtap="savePosterPic">保存到相册</view>
 </view>
 
+<!-- 弹出层van-popup：加入购物车和立即购买按钮都需要选择商品规格-->
 <van-popup show="{{ !hideShopPopup }}" round closeable position="bottom"
   custom-style="padding-top:48rpx;max-height: 80%;" bind:close="closePopupTap">
   <van-card centered price="{{ selectSizePrice }}"
@@ -259,7 +296,11 @@
       <van-stepper value="{{ buyNumber }}" min="{{ buyNumMin }}" max="{{ buyNumMax }}" bind:change="stepChange" />
     </view>
   </van-cell>
-  <van-button wx:if="{{shopType =='addShopCar'}}" bindtap="addShopCar" type="danger" block>加入购物车</van-button>
-  <van-button wx:if="{{shopType =='tobuy' || shopType =='toPingtuan'}}" data-shopType="{{shopType}}" bindtap="buyNow"
-    type="danger" block>立即购买</van-button>
+  <!-- <van-button wx:if="{{shopType =='addShopCar'}}" bindtap="addShopCar" type="danger" round block>收藏</van-button> -->
+    <view wx:if="{{shopType =='addShopCar'}}" bindtap="addShopCar" 
+    style="background-color:orange; color:white; border-radius: 36rpx; margin: 20rpx;padding: 16rpx 0;text-align: center;">
+    收 藏
+    </view>
+  <!-- <van-button wx:if="{{shopType =='tobuy' || shopType =='toPingtuan'}}" data-shopType="{{shopType}}" bindtap="buyNow"
+    type="danger" block>立即购买</van-button> -->
 </van-popup>

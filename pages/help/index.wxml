@@ -1,3 +1,4 @@
+<!-- 帮助中心页面 -->
 <scroll-view class="category" scroll-y="true" scroll-with-animation="true">
   <van-sidebar bind:change="categoryChange">
     <van-sidebar-item wx:for="{{category}}" wx:key="id" title="{{item.name}}" />

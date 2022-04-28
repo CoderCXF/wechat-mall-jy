@@ -39,9 +39,12 @@ Page({
       shopping_cart_vop_open: wx.getStorageSync('shopping_cart_vop_open')
     })
   },
+  // onShow生命周期函数直接调用shippingCarInfo
   onShow: function () {
+    
     this.shippingCarInfo()
   },
+  // 该函数是核心函数，用户获取所有的购物车商品
   async shippingCarInfo() {
     const token = wx.getStorageSync('token')
     if (!token) {
@@ -76,6 +79,7 @@ Page({
     });
   },
 
+  // touch事件
   touchS: function (e) {
     if (e.touches.length == 1) {
       this.setData({
@@ -214,5 +218,13 @@ Page({
       shopCarType: event.detail.name
     })
     this.shippingCarInfo()
+  },
+  // 购物车列表中商品跳转至指定的商品id详情goods-detail
+  clkToDetail(e){
+    // console.log(e.currentTarget.dataset.id)
+    let goodsId = e.currentTarget.dataset.id
+    wx.navigateTo({
+      url: '/pages/goods-details/index?id=' + goodsId
+    })
   }
 })

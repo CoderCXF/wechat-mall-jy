@@ -1,5 +1,5 @@
 {
-  "pages": [    
+  "pages": [
     "pages/start/start",
     "pages/shop/select",
     "pages/index/index",
@@ -54,7 +54,8 @@
     "pages/recycle/orders",
     "pages/recycle/order-detail",
     "pages/card/logs",
-    "pages/notagree/index"
+    "pages/notagree/index",
+    "pages/shareDetails/index"
   ],
   "subpackages": [
     {
@@ -89,7 +90,8 @@
         "pages/commisionLog/index",
         "pages/report/team",
         "pages/report/city",
-        "pages/myusers/myusers-detail"
+        "pages/myusers/myusers-detail",
+        "pages/shareDetais/index"
       ]
     }
   ],
@@ -107,7 +109,7 @@
     "backgroundColor": "#fff",
     "list": [
       {
-        "pagePath": "pages/index/index", 
+        "pagePath": "pages/index/index",
         "iconPath": "images/nav/home-off.png",
         "selectedIconPath": "images/nav/home-on.png",
         "text": "首页"
@@ -120,9 +122,9 @@
       },
       {
         "pagePath": "pages/shop-cart/index",
-        "iconPath": "images/nav/cart-off.png",
-        "selectedIconPath": "images/nav/cart-on.png",
-        "text": "购物车"
+        "iconPath": "images/nav/star-off.png",
+        "selectedIconPath": "images/nav/star-on.png",
+        "text": "收藏"
       },
       {
         "pagePath": "pages/my/index",
@@ -139,7 +141,7 @@
   },
   "usingComponents": {
     "fuwuxieyi": "/components/fuwuxieyi/index",
-    "parser":"/components/parser.20200414.min/parser",
+    "parser": "/components/parser.20200414.min/parser",
     "van-notice-bar": "@vant/weapp/notice-bar/index",
     "van-search": "@vant/weapp/search/index",
     "van-divider": "@vant/weapp/divider/index",

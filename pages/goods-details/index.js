@@ -20,6 +20,26 @@ Page({
     propertyChildNames: "",
     canSubmit: false, //  选中规格尺寸时候是否允许加入购物车
     shopType: "addShopCar", //购物类型，加入购物车或立即购买，默认为加入购物车
+    // 地图数据
+    showMap: false, // 因为做出弹窗效果，所以这里默认为false
+    latitude: 34.261845,
+    longitude: 117.206484,
+    markers: [{
+      id: 1,
+      latitude: 34.261845,
+      longitude: 117.206484,
+      name: '徐州高铁站'
+    }],
+    covers: [{
+      latitude: 23.099994,
+      longitude: 113.344520,
+      iconPath: '/image/location.png'
+    }, {
+      latitude: 23.099994,
+      longitude: 113.304520,
+      iconPath: '/image/location.png'
+    }]
+
   },
   bindscroll(e) {
     if (this.data.tabclicked) {
@@ -598,7 +618,7 @@ Page({
 
     this.closePopupTap();
     wx.showToast({
-      title: '加入购物车',
+      title: '收藏成功',
       icon: 'success'
     })
     this.shippingCartInfo()
@@ -1045,5 +1065,16 @@ Page({
       url: '/pages/index/index',
     })
   },
+  // 地图显示弹出框
+  handleMapShowStatus(){
+    this.setData({
+      showMap: true
+    })
+  },
+  closeMapTap(){
+    this.setData({
+      showMap: false
+    })
+  }
 })
 

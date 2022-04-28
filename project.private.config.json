@@ -27,10 +27,10 @@
           "scene": 1011
         },
         {
-          "id": -1,
           "name": "商品详情页面",
           "pathName": "pages/goods-details/index",
-          "query": "id= 6761",
+          "query": "id= 1130632",
+          "launchMode": "default",
           "scene": null
         },
         {
@@ -327,6 +327,27 @@
         {
           "name": "启动页面",
           "pathName": "pages/start/start",
+          "query": "",
+          "launchMode": "default",
+          "scene": null
+        },
+        {
+          "name": "购物车页面",
+          "pathName": "pages/shop-cart/index",
+          "query": "",
+          "launchMode": "default",
+          "scene": null
+        },
+        {
+          "name": "",
+          "pathName": "pages/start/start",
+          "query": "",
+          "launchMode": "default",
+          "scene": null
+        },
+        {
+          "name": "",
+          "pathName": "pages/shareDetails/index",
           "query": "",
           "scene": null,
           "launchMode": "default"

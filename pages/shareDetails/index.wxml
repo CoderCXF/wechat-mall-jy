@@ -1,0 +1,36 @@
+<!--pages/shareDetails/index.wxml-->
+<!-- 该页面获取与收藏页面选中的商品一致，用于向客服发送消息，使得客服知道你需要哪些商品 -->
+<view name="cart-goods-list">
+  <view class="goodsList">
+  <!-- van-cell 单元格组-->
+  <!-- shop-name:店铺名称 -->
+    <van-cell-group wx:for="{{shippingCarInfo.shopList}}" wx:for-item="shop" wx:for-index="shopIndex" wx:key="id" title="{{ shop.name }}">
+      <!-- 对于该店铺下的所有商品进行遍历 -->
+      <view class="a-gooods" wx:for="{{shippingCarInfo.items}}" wx:key="key" wx:if="{{ item.shopId == shop.id }}">
+        <view class="a-goods-conts" bindtap="clkToDetail" data-index="{{index}}" data-id="{{item.goodsId}}">
+          <!-- 商品信息盒子 -->
+          <view class="goods-info">
+            <!-- 图片 -->
+            <view class="img-box">
+              <image mode="aspectFill" src="{{item.pic}}" class="img" />
+            </view>
+            <!-- 商品描述信息 -->
+            <view class="text-box">
+              <!-- 描述信息头 -->
+              <view class="goods-title">{{item.name}}</view>
+              <!-- 颜色和尺码等sku信息，默认保存在后端items.sku数组中 -->
+              <view wx:show="{{item.sku}}" class="goods-label">
+                <block wx:for="{{item.sku}}" wx:for-item="option" wx:key="index">
+                  {{option.optionName}}:{{option.optionValueName}}
+                </block>
+                <block wx:for="{{item.additions}}" wx:for-item="option" wx:key="index">
+                  {{option.pname}}:{{option.name}}
+                </block>
+              </view>
+            </view>
+          </view>
+        </view>
+      </view>
+    </van-cell-group>
+  </view>
+</view>
